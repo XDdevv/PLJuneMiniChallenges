@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import zed.rainxch.pljuneminichallenges.R
@@ -47,9 +48,15 @@ fun BirthdayInviteCard(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val isTablet = isTablet(context)
-    val cardHeight = if (isTablet) Modifier.height(600.dp)
-    else Modifier.height(400.dp)
+    val isTablet = remember { isTablet(context) }
+    val cardWidth = if (isTablet) 640.dp else 380.dp
+    val cardHeight = if (isTablet) 800.dp else 480.dp
+    val titleSize = if (isTablet) 60.sp else 36.sp
+    val descriptionSize = if (isTablet) 34.sp else 21.sp
+    val contentSize = if (isTablet) 34.sp else 21.sp
+    val rsvpSize = if (isTablet) 26.sp else 16.sp
+    val spacerSize = if (isTablet) 56.dp else 32.dp
+    val contentPadding = if (isTablet) 56.dp else 0.dp
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -65,15 +72,13 @@ fun BirthdayInviteCard(
                 shape = RoundedCornerShape(28.dp),
                 color = BirthdayInviteColors.SURFACE.toColorX(),
                 modifier = Modifier
-                    .then(cardHeight)
-                    .width(640.dp)
-                    .padding(horizontal = 40.dp)
+                    .width(cardWidth)
+                    .height(cardHeight)
             ) {
-
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(vertical = 16.dp, horizontal = contentPadding),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -81,21 +86,21 @@ fun BirthdayInviteCard(
                     Text(
                         text = birthdayCard.title,
                         color = BirthdayInviteColors.SECONDARY.toColorX(),
-                        fontSize = 32.sp,
+                        fontSize = titleSize,
                         fontFamily = maliFont,
                         fontWeight = FontWeight.SemiBold,
                         textAlign = TextAlign.Center
                     )
                     Text(
                         text = birthdayCard.description,
-                        fontSize = 18.sp,
+                        fontSize = descriptionSize,
                         fontWeight = FontWeight.Normal,
                         fontFamily = maliFont,
                         color = BirthdayInviteColors.SECONDARY.toColorX(),
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(Modifier.height(24.dp))
+                    Spacer(Modifier.height(spacerSize))
 
                     val formattedDateText = remember {
                         createPairAnnotatedText(
@@ -118,23 +123,24 @@ fun BirthdayInviteCard(
 
                     Text(
                         text = formattedDateText,
-                        fontSize = 18.sp,
+                        fontSize = contentSize,
                         fontFamily = nunitoFont,
                         textAlign = TextAlign.Center
                     )
 
                     Text(
                         text = formattedTimeText,
-                        fontSize = 18.sp,
+                        fontSize = contentSize,
                         fontFamily = nunitoFont,
                         textAlign = TextAlign.Center
                     )
 
                     Text(
                         text = location,
-                        fontSize = 18.sp,
+                        fontSize = contentSize,
                         fontFamily = nunitoFont,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        lineHeight = contentSize * 1.2f
                     )
 
                     Spacer(Modifier.weight(1f))
@@ -143,7 +149,7 @@ fun BirthdayInviteCard(
                         text = "RSVP by ${birthdayCard.rsvp}",
                         fontFamily = nunitoFont,
                         color = BirthdayInviteColors.SECONDARY.toColorX().copy(alpha = .8f),
-                        fontSize = 16.sp
+                        fontSize = rsvpSize
                     )
                 }
 
@@ -152,6 +158,8 @@ fun BirthdayInviteCard(
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds
                 )
+
+                Spacer(Modifier.height(24.dp))
             }
         }
     }
