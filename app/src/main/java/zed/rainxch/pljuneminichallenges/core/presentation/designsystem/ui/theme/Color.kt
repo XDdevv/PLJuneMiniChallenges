@@ -12,7 +12,6 @@ val Pink40 = Color(0xFF7D5260)
 
 object BirthdayInviteColors {
     const val BACKGROUND = 0XFF1A597B
-    const val ON_SURFACE = 0XFF1A597B
     const val SECONDARY = 0XFF113345
     const val SURFACE = 0xffFFF5EB
 }

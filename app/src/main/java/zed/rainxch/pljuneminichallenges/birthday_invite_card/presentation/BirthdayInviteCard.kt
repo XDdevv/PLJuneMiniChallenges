@@ -1,5 +1,6 @@
 package zed.rainxch.pljuneminichallenges.birthday_invite_card.presentation
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -15,11 +15,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -28,9 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.toColor
 import zed.rainxch.pljuneminichallenges.R
 import zed.rainxch.pljuneminichallenges.birthday_invite_card.presentation.model.BirthdayCard
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.BirthdayInviteColors
@@ -45,6 +46,10 @@ fun BirthdayInviteCard(
     birthdayCard: BirthdayCard,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val isTablet = isTablet(context)
+    val cardHeight = if (isTablet) Modifier.height(600.dp)
+    else Modifier.height(400.dp)
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -60,7 +65,8 @@ fun BirthdayInviteCard(
                 shape = RoundedCornerShape(28.dp),
                 color = BirthdayInviteColors.SURFACE.toColorX(),
                 modifier = Modifier
-                    .height(400.dp)
+                    .then(cardHeight)
+                    .width(640.dp)
                     .padding(horizontal = 40.dp)
             ) {
 
@@ -74,7 +80,7 @@ fun BirthdayInviteCard(
                     Spacer(Modifier.weight(1f))
                     Text(
                         text = birthdayCard.title,
-                        color = BirthdayInviteColors.ON_SURFACE.toColorX(),
+                        color = BirthdayInviteColors.SECONDARY.toColorX(),
                         fontSize = 32.sp,
                         fontFamily = maliFont,
                         fontWeight = FontWeight.SemiBold,
@@ -143,7 +149,8 @@ fun BirthdayInviteCard(
 
                 Image(
                     painter = painterResource(R.drawable.decor),
-                    contentDescription = null
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds
                 )
             }
         }
@@ -175,7 +182,15 @@ fun createPairAnnotatedText(
     }
 }
 
-@Preview
+fun isTablet(context: Context): Boolean {
+    return (context.resources.configuration.smallestScreenWidthDp >= 600)
+}
+
+@Preview(
+    name = "Tablet - Portrait",
+    widthDp = 800,
+    heightDp = 1280
+)
 @Composable
 private fun BirthdayInviteCardPreview() {
     BirthdayInviteCard(
