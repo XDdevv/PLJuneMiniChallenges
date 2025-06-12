@@ -1,10 +1,21 @@
-package zed.rainxch.pljuneminichallenges.ui.theme
+package zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import zed.rainxch.pljuneminichallenges.R
+
+internal val maliFont = FontFamily(
+    Font(R.font.mali_semi_bold, FontWeight.SemiBold),
+    Font(R.font.mali_regular, FontWeight.Normal),
+)
+
+internal val nunitoFont = FontFamily(
+    Font(R.font.nunito_regular, FontWeight.Normal),
+)
 
 // Set of Material typography styles to start with
 val Typography = Typography(

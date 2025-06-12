@@ -4,14 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import zed.rainxch.pljuneminichallenges.ui.theme.PLJuneMiniChallengesTheme
+import zed.rainxch.pljuneminichallenges.birthday_invite_card.presentation.BirthdayInviteCard
+import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.PLJuneMiniChallengesTheme
+import zed.rainxch.pljuneminichallenges.core.presentation.utils.Previews
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +14,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PLJuneMiniChallengesTheme {
-
+                BirthdayInviteCard(
+                    birthdayCard = Previews.birthdayCardPreview
+                )
             }
         }
     }

@@ -1,6 +1,5 @@
-package zed.rainxch.pljuneminichallenges.ui.theme
+package zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -10,6 +9,11 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import zed.rainxch.pljuneminichallenges.R
+
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
