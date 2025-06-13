@@ -16,6 +16,13 @@ object BirthdayInviteColors {
     const val SURFACE = 0xffFFF5EB
 }
 
+object CandleChallengeColors {
+    const val BACKGROUND = 0XFF1A597B
+    const val ON_BACKGROUND = 0XFFFFF5EB
+    const val ON_SURFACE = 0XFF113345
+    const val SURFACE_HIGHER = 0XFF95D3ED
+}
+
 fun Long.toColorX() : Color {
     return Color(this)
 }

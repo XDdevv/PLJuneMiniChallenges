@@ -5,9 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import zed.rainxch.pljuneminichallenges.birthday_invite_card.presentation.BirthdayInviteCard
+import zed.rainxch.pljuneminichallenges.cake_lighting_controller.presentation.CakeLightingController
+import zed.rainxch.pljuneminichallenges.cake_lighting_controller.presentation.CakeLightingControllerRoot
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.PLJuneMiniChallengesTheme
-import zed.rainxch.pljuneminichallenges.core.presentation.utils.Previews
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,9 +17,7 @@ class MainActivity : ComponentActivity() {
             val viewModel by viewModels<TestViewmodel>()
 //            viewModel.start()
             PLJuneMiniChallengesTheme {
-                BirthdayInviteCard(
-                    birthdayCard = Previews.birthdayCardPreview
-                )
+                CakeLightingControllerRoot()
             }
         }
     }
