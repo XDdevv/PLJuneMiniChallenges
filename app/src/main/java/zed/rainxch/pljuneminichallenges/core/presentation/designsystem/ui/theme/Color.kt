@@ -23,6 +23,17 @@ object CandleChallengeColors {
     const val SURFACE_HIGHER = 0XFF95D3ED
 }
 
+object PartyHostDashboardColors {
+    const val BACKGROUND = 0XFF1A597B
+    const val ON_SURFACE = 0XFF113345
+    const val SURFACE = 0XFFFFF5EB
+    const val SURFACE_HIGHER = 0XFF95D3ED
+    const val SURFACE_HIGHER_VAR = 0XFFFFFFFF
+    const val ELECTRIC_BLUE = 0XFF00B2FF
+    const val FOREST_GREEN = 0XFF7BB274
+    const val BOULDER_GREY = 0XFF7D7F7D
+}
+
 fun Long.toColorX() : Color {
     return Color(this)
 }

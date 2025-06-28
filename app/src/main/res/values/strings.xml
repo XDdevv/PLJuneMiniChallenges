@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">PLJuneMiniChallenges</string>
+    <string name="status_attending">Attending</string>
+    <string name="status_not_coming">Not Coming</string>
+    <string name="status_maybe">Maybe</string>
+
+    <string-array name="gifts">
+        <item name="gift_journal">Personalized journal</item>
+        <item name="gift_mug">Handcrafted ceramic mug</item>
+        <item name="gift_chocolate">Belgian chocolate sampler</item>
+        <item name="gift_catnip">Catnip toy &amp; treats</item>
+        <item name="gift_photo_frame">Photo frame with fairy lights</item>
+        <item name="gift_book">Classic novel: Things Fall Apart</item>
+        <item name="gift_painting">Watercolor painting set</item>
+        <item name="gift_speaker">Bluetooth speaker</item>
+        <item name="gift_bakery_card">Gift card to local bakery</item>
+        <item name="gift_bracelet">Custom charm bracelet</item>
+    </string-array>
+
+    <string-array name="events">
+        <item name="event_venue_setup">Venue Setup</item>
+        <item name="event_welcome_arrival">Welcome &amp; Guest Arrival</item>
+        <item name="event_cake_cutting">Cake Cutting Ceremony</item>
+        <item name="event_party_games">Party Games Begin</item>
+        <item name="event_face_painting">Face Painting &amp; Photos</item>
+        <item name="event_dinner">Dinner is Served</item>
+        <item name="event_speeches">Speeches &amp; Toasts</item>
+        <item name="event_dance_floor">Dance Floor Opens</item>
+        <item name="event_goodbyes">Thank You &amp; Goodbyes</item>
+    </string-array>
 </resources>
