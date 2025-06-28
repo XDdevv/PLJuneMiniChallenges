@@ -10,7 +10,7 @@ class StringResourceProvider(
         val arr = context.resources.getTextArray(R.array.gifts)
         return arr.map { it.toString() }.toList()
     }
-    fun provideEventList(): List<String> {
+    fun getEventList(): List<String> {
         val arr = context.resources.getTextArray(R.array.gifts)
         return arr.map { it.toString() }.toList()
     }

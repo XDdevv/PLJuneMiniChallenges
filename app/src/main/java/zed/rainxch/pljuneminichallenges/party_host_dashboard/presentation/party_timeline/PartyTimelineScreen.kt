@@ -1,4 +1,4 @@
-package zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.guest_list
+package zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.party_timeline
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,29 +29,29 @@ import zed.rainxch.pljuneminichallenges.birthday_invite_card.presentation.isTabl
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.PartyHostDashboardColors
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.nunitoFont
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.toColorX
-import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.guest_list.components.GuestItem
-import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.guest_list.components.GuestTabletDetailsScreen
-import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.guest_list.vm.GuestListViewModelProvider
-import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.model.Guest
+import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.model.Event
+import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.party_timeline.components.EventItem
+import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.party_timeline.components.EventTabletDetailsScreen
+import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.party_timeline.vm.PartyTimelineViewModelProvider
 
 @Composable
-fun GuestListScreenRoot(
-    onNavigateToDetailsScreen: (Guest) -> Unit
+fun PartyTimelineScreenRoot(
+    onNavigateToDetailsScreen: (Event) -> Unit,
 ) {
     val context = LocalContext.current
-    val viewModelFactory = GuestListViewModelProvider(context = context)
-    val viewModel = viewModel<GuestListViewModel>(factory = viewModelFactory)
+    val viewModelFactory = PartyTimelineViewModelProvider(context = context)
+    val viewModel = viewModel<PartyTimelineViewModel>(factory = viewModelFactory)
     val state by viewModel.state.collectAsState()
 
     val isTablet = isTablet(context)
 
     if (isTablet) {
-        GuestListTabletScreen(
+        PartyTimelineTabletScreen(
             state = state,
             onAction = viewModel::onAction
         )
     } else {
-        GuestListScreen(
+        PartyTimelineScreen(
             state = state,
             onNavigateToDetailsScreen = onNavigateToDetailsScreen
         )
@@ -59,9 +59,9 @@ fun GuestListScreenRoot(
 }
 
 @Composable
-fun GuestListTabletScreen(
-    state: GuestListUiState,
-    onAction: (GuestListActions) -> Unit,
+fun PartyTimelineTabletScreen(
+    state: PartyTimelineUiState,
+    onAction: (EventTimelineActions) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -96,19 +96,19 @@ fun GuestListTabletScreen(
                     .background(PartyHostDashboardColors.SURFACE_HIGHER_VAR.toColorX())
                     .padding(vertical = 8.dp)
             ) {
-                items(state.guestList) { guest ->
-                    GuestItem(
-                        guest = guest,
+                items(state.eventList) { event ->
+                    EventItem(
+                        event = event,
                         onClick = {
-                            onAction(GuestListActions.OnGuestSelected(guest))
+                            onAction(EventTimelineActions.OnEventSelected(event))
                         }
                     )
                 }
             }
 
             state.currentSelectedGuest?.let {
-                GuestTabletDetailsScreen(
-                    guest = state.currentSelectedGuest,
+                EventTabletDetailsScreen(
+                    event = state.currentSelectedGuest,
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(12.dp))
@@ -125,9 +125,9 @@ fun GuestListTabletScreen(
 }
 
 @Composable
-fun GuestListScreen(
-    state: GuestListUiState,
-    onNavigateToDetailsScreen: (Guest) -> Unit,
+fun PartyTimelineScreen(
+    state: PartyTimelineUiState,
+    onNavigateToDetailsScreen: (Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -157,11 +157,11 @@ fun GuestListScreen(
                 .background(PartyHostDashboardColors.SURFACE_HIGHER_VAR.toColorX())
                 .padding(vertical = 8.dp)
         ) {
-            items(state.guestList) { guest ->
-                GuestItem(
-                    guest = guest,
+            items(state.eventList) { event ->
+                EventItem(
+                    event = event,
                     onClick = {
-                        onNavigateToDetailsScreen(guest)
+                        onNavigateToDetailsScreen(event)
                     }
                 )
             }
@@ -172,9 +172,9 @@ fun GuestListScreen(
 
 @PreviewScreenSizes
 @Composable
-fun GuestListScreenPreview() {
-    GuestListScreen(
-        state = GuestListUiState(),
+fun PartyTimelineScreenPreview() {
+    PartyTimelineScreen(
+        state = PartyTimelineUiState(),
         {}
     )
 }

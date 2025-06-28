@@ -24,20 +24,24 @@ import zed.rainxch.pljuneminichallenges.R
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.PartyHostDashboardColors
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.toColorX
 import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.components.AppNavigationBar
+import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.gifts.GiftsScreenRoot
 import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.guest_list.GuestListDetailsScreen
 import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.guest_list.GuestListScreenRoot
+import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.model.Event
 import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.model.Guest
 import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.navigation.NavGraph
 import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.navigation.SerializableNavType
+import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.party_timeline.EventTimelineDetailsScreen
+import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.party_timeline.PartyTimelineScreenRoot
 import kotlin.reflect.typeOf
 
 @Composable
 fun PartyHostDashboardRoot() {
-    PartyHostDashboard()
+    PartyHostApp()
 }
 
 @Composable
-fun PartyHostDashboard() {
+fun PartyHostApp() {
     var selectedItemIndex by remember { mutableIntStateOf(0) }
     val navHost = rememberNavController()
     AppNavigationBar(
@@ -85,10 +89,29 @@ fun PartyHostDashboard() {
                     )
                 }
                 composable<NavGraph.PartyTimelineScreen> {
-
+                    PartyTimelineScreenRoot(
+                        onNavigateToDetailsScreen = { event ->
+                            navHost.navigate(NavGraph.PartyTimelineDetailsScreen(event))
+                        }
+                    )
                 }
-                composable<NavGraph.GiftsScreen> {
 
+                composable<NavGraph.PartyTimelineDetailsScreen> (
+                    typeMap = mapOf(
+                        typeOf<Event>() to SerializableNavType.create(serializer<Event>())
+                    )
+                ) { backStackEntry ->
+                    val arguments = backStackEntry.toRoute<NavGraph.PartyTimelineDetailsScreen>()
+                    EventTimelineDetailsScreen(
+                        event = arguments.event,
+                        onNavigateBack = {
+                            navHost.popBackStack()
+                        }
+                    )
+                }
+
+                composable<NavGraph.GiftsScreen> {
+                    GiftsScreenRoot()
                 }
             }
         }
@@ -98,5 +121,5 @@ fun PartyHostDashboard() {
 @Preview
 @Composable
 private fun PartyHostDashboardPreview() {
-    PartyHostDashboard()
+    PartyHostApp()
 }
