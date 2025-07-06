@@ -1,7 +1,7 @@
 package zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.components
 
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRailItemDefaults
@@ -15,42 +15,23 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.window.core.layout.WindowWidthSizeClass
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.PartyHostDashboardColors
-import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.gift
-import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.guests
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.toColorX
-import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.watch
-import zed.rainxch.pljuneminichallenges.party_host_dashboard.presentation.navigation.NavGraph
 
 @Composable
 fun AppNavigationBar(
     selectedItemIndex: Int,
-    onNavItemClick: (Int, Destination) -> Unit,
-    content : @Composable () -> Unit,
+    onNavItemClick: (index : Int, menu:  MenuItem) -> Unit,
+    showNavigationBar: Boolean,
+    navigationItems: List<MenuItem>,
+    content: @Composable () -> Unit,
 ) {
-    val navigationItems = listOf(
-        Destination(
-            title = "Guest list",
-            icon = Icons.Outlined.guests,
-            screen = NavGraph.GuestListScreen
-        ),
-        Destination(
-            title = "Party Timeline",
-            icon = Icons.Outlined.watch,
-            screen = NavGraph.PartyTimelineScreen
-        ),
-        Destination(
-            title = "Gifts",
-            icon = Icons.Outlined.gift,
-            screen = NavGraph.GiftsScreen
-        )
-    )
 
-    val navBarItemColors = NavigationBarItemDefaults.colors(
+    val windowWidthClass = currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass
+    val navBottomBarColors = NavigationBarItemDefaults.colors(
         indicatorColor = PartyHostDashboardColors.SURFACE_HIGHER.toColorX(),
         selectedTextColor = PartyHostDashboardColors.ON_SURFACE.toColorX(),
         unselectedTextColor = PartyHostDashboardColors.ON_SURFACE.toColorX().copy(alpha = .8f),
     )
-    val windowWidthClass = currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass
     val navBarRailColors = NavigationRailItemDefaults.colors(
         selectedTextColor = PartyHostDashboardColors.ON_SURFACE.toColorX(),
         unselectedTextColor = PartyHostDashboardColors.ON_SURFACE.toColorX().copy(alpha = .8f),
@@ -64,26 +45,26 @@ fun AppNavigationBar(
     )
     NavigationSuiteScaffold(
         navigationSuiteItems = {
-            navigationItems.forEachIndexed { index, item ->
+            navigationItems.forEachIndexed { index, destination ->
                 item(
                     selected = index == selectedItemIndex,
                     onClick = {
-                        onNavItemClick(index, item)
+                        onNavItemClick(index, destination)
                     },
                     icon = {
                         Icon(
-                            imageVector = item.icon,
-                            contentDescription = item.title
+                            imageVector = destination.icon,
+                            contentDescription = destination.title
                         )
                     },
                     label = {
                         Text(
-                            text = item.title
+                            text = destination.title
                         )
                     },
                     alwaysShowLabel = true,
                     colors = NavigationSuiteItemColors(
-                        navigationBarItemColors = navBarItemColors,
+                        navigationBarItemColors = navBottomBarColors,
                         navigationRailItemColors = navBarRailColors,
                         navigationDrawerItemColors = navDrawerColors,
                     )
@@ -92,21 +73,27 @@ fun AppNavigationBar(
         },
         navigationSuiteColors = NavigationSuiteDefaults.colors(
             navigationBarContainerColor = PartyHostDashboardColors.SURFACE_HIGHER_VAR.toColorX(),
-            navigationRailContainerColor = PartyHostDashboardColors.SURFACE_HIGHER_VAR.toColorX()
-        ),        layoutType = when (windowWidthClass) {
-            WindowWidthSizeClass.EXPANDED, WindowWidthSizeClass.MEDIUM -> {
-                NavigationSuiteType.NavigationDrawer
-            }
+            navigationRailContainerColor = PartyHostDashboardColors.SURFACE_HIGHER_VAR.toColorX(),
+            navigationDrawerContainerColor = PartyHostDashboardColors.SURFACE_HIGHER_VAR.toColorX()
+        ),
+        layoutType =
+            if (showNavigationBar) {
+                when (windowWidthClass) {
+                    WindowWidthSizeClass.EXPANDED, WindowWidthSizeClass.MEDIUM -> {
+                        NavigationSuiteType.NavigationDrawer
+                    }
 
-            WindowWidthSizeClass.COMPACT -> {
-                NavigationSuiteType.NavigationBar
-            }
+                    WindowWidthSizeClass.COMPACT -> {
+                        NavigationSuiteType.NavigationBar
+                    }
 
-            else -> NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(
-                currentWindowAdaptiveInfo()
-            )
-        },
-    ) {
-        content()
-    }
+                    else -> NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(
+                        currentWindowAdaptiveInfo()
+                    )
+                }
+            } else {
+                NavigationSuiteType.None
+            },
+        content = content
+    )
 }

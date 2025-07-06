@@ -32,6 +32,15 @@ object PartyHostDashboardColors {
     const val ELECTRIC_BLUE = 0XFF00B2FF
     const val FOREST_GREEN = 0XFF7BB274
     const val BOULDER_GREY = 0XFF7D7F7D
+
+}
+
+object BirthdayCelebrationColors {
+    const val BACKGROUND = 0xff1A597B
+    const val ON_SURFACE = 0xff113345
+    const val SURFACE = 0xffFFF5EB
+    const val SURFACE_HIGHER = 0xff95D3ED
+    const val ERROR = 0xffD02A27
 }
 
 fun Long.toColorX() : Color {
