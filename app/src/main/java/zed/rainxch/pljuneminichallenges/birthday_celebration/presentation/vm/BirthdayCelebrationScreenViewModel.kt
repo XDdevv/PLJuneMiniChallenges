@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import zed.rainxch.pljuneminichallenges.birthday_celebration.domain.notification.NotificationManager
 import zed.rainxch.pljuneminichallenges.birthday_celebration.presentation.model.Count
 
 data class BirthdayCelebrationUiState(
@@ -23,10 +24,12 @@ sealed interface BirthdayCelebrationActions {
 }
 
 sealed interface BirthdayCelebrationEvents {
-    data class OnSentMessage(val message: String) : BirthdayCelebrationEvents
+    data class OnSentNotification(val message: String) : BirthdayCelebrationEvents
 }
 
-class BirthdayCelebrationScreenViewModel : ViewModel() {
+class BirthdayCelebrationScreenViewModel(
+    private val notificationManager: NotificationManager,
+) : ViewModel() {
     private val _state = MutableStateFlow(BirthdayCelebrationUiState())
     val state = _state.asStateFlow()
 
@@ -49,6 +52,10 @@ class BirthdayCelebrationScreenViewModel : ViewModel() {
         }
     }
 
+    fun sendNotification(message: String) {
+        notificationManager.showNotification(message)
+    }
+
     private fun startCountdown() {
         counterJob?.cancel()
         counterJob = viewModelScope.launch {
@@ -63,7 +70,7 @@ class BirthdayCelebrationScreenViewModel : ViewModel() {
             _state.update { it.copy(countingDown = false) }
 
             _eventsChannel.send(
-                BirthdayCelebrationEvents.OnSentMessage(
+                BirthdayCelebrationEvents.OnSentNotification(
                     message = "\uD83C\uDF89 Itʼs cake time !"
                 )
             )

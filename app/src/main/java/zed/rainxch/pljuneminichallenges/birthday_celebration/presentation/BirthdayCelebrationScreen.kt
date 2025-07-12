@@ -1,6 +1,9 @@
 package zed.rainxch.pljuneminichallenges.birthday_celebration.presentation
 
-import android.widget.Toast
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,6 +15,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -24,7 +28,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.viewModelFactory
 import zed.rainxch.pljuneminichallenges.R
+import zed.rainxch.pljuneminichallenges.birthday_celebration.data.notification.NotificationManagerImpl
 import zed.rainxch.pljuneminichallenges.birthday_celebration.presentation.components.BirthdayCelebrationButton
 import zed.rainxch.pljuneminichallenges.birthday_celebration.presentation.vm.BirthdayCelebrationActions
 import zed.rainxch.pljuneminichallenges.birthday_celebration.presentation.vm.BirthdayCelebrationEvents
@@ -38,16 +44,34 @@ import zed.rainxch.pljuneminichallenges.core.presentation.utils.ObserveAsEvents
 fun BirthdayCelebrationScreenRoot() {
     val context = LocalContext.current
 
-    val viewModel = viewModel<BirthdayCelebrationScreenViewModel>()
+    val viewModel = viewModel<BirthdayCelebrationScreenViewModel> {
+        BirthdayCelebrationScreenViewModel(
+            NotificationManagerImpl(context)
+        )
+    }
+
     val state by viewModel.state.collectAsState()
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+
+    }
+
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
-            is BirthdayCelebrationEvents.OnSentMessage -> {
-                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+            is BirthdayCelebrationEvents.OnSentNotification -> {
+                viewModel.sendNotification("\uD83C\uDF89 Itʼs cake time !")
             }
         }
     }
+
     BirthdayCelebrationScreen(
         state = state,
         onAction = viewModel::onAction

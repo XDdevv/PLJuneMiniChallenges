@@ -43,6 +43,15 @@ object BirthdayCelebrationColors {
     const val ERROR = 0xffD02A27
 }
 
+object GiftMemoryCatchColors {
+    const val BACKGROUND = 0xff1A597B
+    const val ON_SURFACE = 0xff113345
+    const val ON_BACKGROUND = 0xffFFF5EB
+    const val SURFACE = 0xffFFF5EB
+    const val SURFACE_VAR = 0xffF5E7DA
+    const val SURFACE_HIGHER = 0xff95D3ED
+}
+
 fun Long.toColorX() : Color {
     return Color(this)
 }
