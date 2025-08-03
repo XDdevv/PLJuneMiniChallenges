@@ -2,11 +2,14 @@ package zed.rainxch.pljuneminichallenges.gift_memory_match.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -15,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,6 +37,7 @@ import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.toColorX
 import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.components.GiftCardItem
 import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.components.GiftCardSide
+import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.components.GiftMemoryButton
 
 @Composable
 fun GiftMemoryMatchScreenRoot() {
@@ -69,7 +74,7 @@ fun GiftMemoryMatchScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "${state.matchedGiftsCount} of ${state.totalGiftCount} matches found",
+                text = "${state.matchedCardCount} of ${state.totalGiftCount} matches found",
                 color = GiftMemoryCatchColors.ON_BACKGROUND.toColorX(),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
@@ -80,18 +85,37 @@ fun GiftMemoryMatchScreen(
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
-                contentPadding = PaddingValues(12.dp)
+                contentPadding = PaddingValues(12.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(state.gifts) { gift ->
+                    var giftCardSide by remember { mutableStateOf(GiftCardSide.FRONT) }
                     GiftCardItem(
-                        giftItem = gift,
+                        gameCard = gift,
+                        giftCardSide = giftCardSide,
                         onClick = {
-                            onAction(GiftMemoryMatchAction.OnGiftSelected(gift))
+                            giftCardSide = if (giftCardSide == GiftCardSide.FRONT) {
+                                GiftCardSide.BACK
+                            } else GiftCardSide.FRONT
+
+                            onAction(GiftMemoryMatchAction.OnCardSelected(gift))
                         }
                     )
                 }
             }
         }
+
+        GiftMemoryButton(
+            text = "Start",
+            onClick = {
+                onAction(GiftMemoryMatchAction.OnStartClick)
+            },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+                .padding(bottom = 32.dp)
+        )
     }
 }
 

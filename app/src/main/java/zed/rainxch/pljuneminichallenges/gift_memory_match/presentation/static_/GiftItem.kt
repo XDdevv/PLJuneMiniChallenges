@@ -9,6 +9,29 @@ data class GiftItem(
     val color: Color,
 )
 
+sealed class GameCard (
+    open val name: String,
+    open val color: Color
+) {
+    data class Recipient(
+        override val name: String,
+        override val color: Color,
+        val colorName: String,
+    ) : GameCard(
+        name = name,
+        color = color
+    )
+
+    data class Gift(
+        override val name: String,
+        override val color: Color,
+        val colorName: String,
+    ) : GameCard(
+        name = name,
+        color = color
+    )
+}
+
 val giftsList = listOf(
     GiftItem("Lily", "Watering can", "Leaf Green", LeafGreen),
     GiftItem("Chip", "Cookie tin", "Caramel Brown", CaramelBrown),
@@ -31,3 +54,21 @@ val giftsList = listOf(
     GiftItem("Ash", "Campfire candle", "Charcoal Gray", CharcoalGray),
     GiftItem("Brock", "Onix figure", "Boulder Gray", BoulderGray)
 )
+
+fun List<GiftItem>.toGameCards(): List<GameCard> {
+    return this.map { giftItem ->
+        val recipient: GameCard = GameCard.Recipient(
+            name = giftItem.recipient,
+            color = giftItem.color,
+            colorName = giftItem.colorName
+        )
+
+        val gift: GameCard = GameCard.Gift(
+            name = giftItem.gift,
+            color = giftItem.color,
+            colorName = giftItem.colorName
+        )
+
+        listOf(recipient, gift)
+    }.flatten()
+}
