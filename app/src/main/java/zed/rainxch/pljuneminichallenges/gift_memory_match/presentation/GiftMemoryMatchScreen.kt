@@ -18,12 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,7 +34,6 @@ import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.maliFont
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.toColorX
 import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.components.GiftCardItem
-import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.components.GiftCardSide
 import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.components.GiftMemoryButton
 
 @Composable
@@ -73,15 +70,24 @@ fun GiftMemoryMatchScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            val progressbarVisibility = remember(state.gameState) {
+                if (state.gameState != GiftMemoryGameState.Idle) {
+                    1f
+                } else 0f
+            }
+
             Text(
                 text = "${state.matchedCardCount} of ${state.totalGiftCount} matches found",
                 color = GiftMemoryCatchColors.ON_BACKGROUND.toColorX(),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = maliFont
+                fontFamily = maliFont,
+                modifier = Modifier.alpha(progressbarVisibility)
             )
 
-            HorizontalDivider()
+            HorizontalDivider(
+                modifier = Modifier.alpha(progressbarVisibility)
+            )
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
@@ -90,15 +96,10 @@ fun GiftMemoryMatchScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(state.gifts) { gift ->
-                    var giftCardSide by remember { mutableStateOf(GiftCardSide.FRONT) }
                     GiftCardItem(
                         gameCard = gift,
-                        giftCardSide = giftCardSide,
+                        enabled = state.enabled,
                         onClick = {
-                            giftCardSide = if (giftCardSide == GiftCardSide.FRONT) {
-                                GiftCardSide.BACK
-                            } else GiftCardSide.FRONT
-
                             onAction(GiftMemoryMatchAction.OnCardSelected(gift))
                         }
                     )
@@ -106,16 +107,26 @@ fun GiftMemoryMatchScreen(
             }
         }
 
-        GiftMemoryButton(
-            text = "Start",
-            onClick = {
-                onAction(GiftMemoryMatchAction.OnStartClick)
-            },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .navigationBarsPadding()
-                .padding(bottom = 32.dp)
-        )
+        if (state.gameState == GiftMemoryGameState.Idle) {
+            GiftMemoryButton(
+                text = "Start",
+                onClick = {
+                    onAction(GiftMemoryMatchAction.OnStartClick)
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .navigationBarsPadding()
+                    .padding(bottom = 32.dp)
+            )
+        }
+
+        if (state.gameState == GiftMemoryGameState.Finished) {
+            GiftMemoryFinishedDialog(
+                onDismiss = {
+                    onAction(GiftMemoryMatchAction.OnTryAgainClick)
+                }
+            )
+        }
     }
 }
 

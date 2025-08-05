@@ -1,6 +1,5 @@
 package zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.components
 
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -15,12 +14,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,13 +48,13 @@ enum class GiftCardIcon(val iconRes: Int) {
 
 @Composable
 fun GiftCardItem(
-    gameCard: GameCard,
-    giftCardSide: GiftCardSide,
+    gameCard: Pair<GiftCardSide, GameCard>,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     val rotationY by animateFloatAsState(
-        targetValue = if (giftCardSide == GiftCardSide.BACK) 0f else 180f,
+        targetValue = if (gameCard.first == GiftCardSide.BACK) 0f else 180f,
         animationSpec = tween(durationMillis = 1000), label = ""
     )
 
@@ -69,14 +65,15 @@ fun GiftCardItem(
     Box(
         modifier = modifier
             .size(120.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = {
-                onClick()
-            })
             .graphicsLayer {
                 this.rotationY = rotationY
                 cameraDistance = 12 * density
             }
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(
+                enabled = enabled,
+                onClick = onClick
+            )
             .background(GiftMemoryCatchColors.SURFACE.toColorX()),
     ) {
         if (showFront) {
@@ -89,9 +86,9 @@ fun GiftCardItem(
 
         } else {
             GameCardContent(
-                title = gameCard.name,
-                borderColor = gameCard.color,
-                giftType = gameCard
+                title = gameCard.second.name,
+                borderColor = gameCard.second.color,
+                giftType = gameCard.second
             )
         }
     }
@@ -134,24 +131,4 @@ private fun GameCardContent(
             textAlign = TextAlign.Center
         )
     }
-}
-
-@Preview
-@Composable
-private fun GiftCardItemPreviewFront() {
-    GiftCardItem(
-        gameCard = giftsList.toGameCards().first(),
-        onClick = {},
-        giftCardSide = GiftCardSide.FRONT
-    )
-}
-
-@Preview
-@Composable
-private fun GiftCardItemPreview() {
-    GiftCardItem(
-        gameCard = giftsList.toGameCards().first(),
-        onClick = {},
-        giftCardSide = GiftCardSide.BACK
-    )
 }
