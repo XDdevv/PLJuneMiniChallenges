@@ -26,20 +26,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import zed.rainxch.pljuneminichallenges.R
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.GiftMemoryCatchColors
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.maliFont
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.toColorX
+import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.models.GiftCardSide
 import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.static_.GameCard
-import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.static_.giftsList
-import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.static_.toGameCards
-
-enum class GiftCardSide {
-    FRONT,
-    BACK
-}
 
 enum class GiftCardIcon(val iconRes: Int) {
     Recipent(R.drawable.ic_guest),
@@ -48,10 +41,9 @@ enum class GiftCardIcon(val iconRes: Int) {
 
 @Composable
 fun GiftCardItem(
-    gameCard: Pair<GiftCardSide, GameCard>,
+    gameCard: Triple<GiftCardSide, GameCard, Boolean>,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
 ) {
     val rotationY by animateFloatAsState(
         targetValue = if (gameCard.first == GiftCardSide.BACK) 0f else 180f,
@@ -71,7 +63,7 @@ fun GiftCardItem(
             }
             .clip(RoundedCornerShape(16.dp))
             .clickable(
-                enabled = enabled,
+                enabled = gameCard.third,
                 onClick = onClick
             )
             .background(GiftMemoryCatchColors.SURFACE.toColorX()),

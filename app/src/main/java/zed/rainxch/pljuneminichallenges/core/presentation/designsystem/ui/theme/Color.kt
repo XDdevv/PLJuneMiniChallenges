@@ -50,8 +50,9 @@ object GiftMemoryCatchColors {
     const val SURFACE = 0xffFFF5EB
     const val SURFACE_VAR = 0xffF5E7DA
     const val SURFACE_HIGHER = 0xff95D3ED
+    val SUCCESS = 0xff96F7C2
 }
 
-fun Long.toColorX() : Color {
+fun Long.toColorX(): Color {
     return Color(this)
 }

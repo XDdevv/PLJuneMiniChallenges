@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -35,6 +36,7 @@ import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.
 import zed.rainxch.pljuneminichallenges.core.presentation.designsystem.ui.theme.toColorX
 import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.components.GiftCardItem
 import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.components.GiftMemoryButton
+import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.components.GiftMemoryProgressbar
 
 @Composable
 fun GiftMemoryMatchScreenRoot() {
@@ -85,8 +87,12 @@ fun GiftMemoryMatchScreen(
                 modifier = Modifier.alpha(progressbarVisibility)
             )
 
-            HorizontalDivider(
-                modifier = Modifier.alpha(progressbarVisibility)
+            GiftMemoryProgressbar(
+                currentProgress = state.matchedCardCount,
+                totalProgress = state.totalGiftCount,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .alpha(progressbarVisibility)
             )
 
             LazyVerticalGrid(
@@ -98,7 +104,6 @@ fun GiftMemoryMatchScreen(
                 items(state.gifts) { gift ->
                     GiftCardItem(
                         gameCard = gift,
-                        enabled = state.enabled,
                         onClick = {
                             onAction(GiftMemoryMatchAction.OnCardSelected(gift))
                         }

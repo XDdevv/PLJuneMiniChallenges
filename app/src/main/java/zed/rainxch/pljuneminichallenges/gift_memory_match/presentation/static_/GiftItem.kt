@@ -9,26 +9,29 @@ data class GiftItem(
     val color: Color,
 )
 
-sealed class GameCard (
+sealed class GameCard(
     open val name: String,
-    open val color: Color
+    open val color: Color,
+    open val colorName: String
 ) {
     data class Recipient(
         override val name: String,
         override val color: Color,
-        val colorName: String,
+        override val colorName: String,
     ) : GameCard(
         name = name,
-        color = color
+        color = color,
+        colorName = colorName
     )
 
     data class Gift(
         override val name: String,
         override val color: Color,
-        val colorName: String,
+        override val colorName: String,
     ) : GameCard(
         name = name,
-        color = color
+        color = color,
+        colorName = colorName
     )
 }
 

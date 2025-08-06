@@ -1,18 +1,19 @@
 package zed.rainxch.pljuneminichallenges.gift_memory_match.presentation
 
-import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.components.GiftCardSide
+import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.models.GiftCardSide
 import zed.rainxch.pljuneminichallenges.gift_memory_match.presentation.static_.GameCard
 
 data class GiftMemoryMatchUiState(
-    val gifts: List<Pair<GiftCardSide, GameCard>> = emptyList(),
+    val gifts: List<Triple<GiftCardSide, GameCard, Boolean>> = emptyList(),
     val matchedCardCount: Int = 0,
     val selectedColor1: String? = null,
     val selectedColor2: String? = null,
-    val enabled : Boolean = false,
+    val selectedIndices : List<Int> = emptyList(),
+    val enabled: Boolean = false,
     val gameState: GiftMemoryGameState = GiftMemoryGameState.Idle,
 ) {
     val totalGiftCount: Int
-        get() = gifts.size
+        get() = gifts.size / 2
 }
 
 sealed class GiftMemoryGameState {
